@@ -1,0 +1,7 @@
+node_modules
+.next
+out
+.tools
+.env
+.env.local
+.env*.local
