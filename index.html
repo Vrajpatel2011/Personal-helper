@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in · Personal Helper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="login" class="login-shell">
+      <div class="login-card">
+        <h1>Personal Helper</h1>
+        <p class="login-note">Enter your password to continue.</p>
+        <form id="login-form" class="login-form">
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" autofocus required />
+          </div>
+          <p id="login-error" class="form-error" role="alert" hidden>That password is incorrect.</p>
+          <button type="submit">Continue</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="site" class="site-shell" hidden>
+      <header class="site-header">
+        <span class="brand-link">Personal Helper</span>
+        <button id="sign-out" class="sign-out" type="button">Sign out</button>
+      </header>
+      <main class="site-main">
+        <div class="desk">
+          <p id="today" class="eyebrow"></p>
+          <h1>Your desk is open.</h1>
+          <p class="lede">You are signed in. This page stays behind the site password, along with the rest of Personal Helper.</p>
+          <ul class="desk-list">
+            <li>
+              <h2>Today</h2>
+              <p>A quiet place for the day in front of you.</p>
+            </li>
+            <li>
+              <h2>Notes</h2>
+              <p>Private notes can live here when you are ready to add them.</p>
+            </li>
+            <li>
+              <h2>Reminders</h2>
+              <p>Nothing is scheduled yet.</p>
+            </li>
+          </ul>
+        </div>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
