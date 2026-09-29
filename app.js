@@ -1,5 +1,6 @@
 const EXPECTED_HASH = "5f4dcc3b5aa765d61d8327deb882cf99"
 const SESSION_KEY = "personal-helper-open"
+const SUBMITTED_KEY = "personal-helper-submitted"
 
 const SHIFT = [7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21]
 
@@ -207,12 +208,17 @@ function initLogin() {
 
       const card = document.createElement("article")
       card.className = "assignment"
-      const title = document.createElement("h3")
-      title.textContent = item.title || "Untitled assignment"
+      const meta = document.createElement("div")
+      meta.className = "assignment-meta"
       const when = document.createElement("p")
       when.className = "due-time"
-      when.textContent = timeLabel(due)
-      card.append(title, when)
+      const dueWord = document.createElement("span")
+      dueWord.textContent = "Due"
+      when.append(dueWord, document.createTextNode(timeLabel(due)))
+      meta.append(when, submissionButton(item))
+      const title = document.createElement("h3")
+      title.textContent = item.title || "Untitled assignment"
+      card.append(meta, title)
 
       const description = cleanDescription(item.description)
       if (description) {
@@ -262,11 +268,50 @@ function dayLabel(due) {
 }
 
 function timeLabel(due) {
-  const time = new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
     minute: "2-digit",
   }).format(due)
-  return `Due ${time}`
+}
+
+function assignmentId(item) {
+  const file = Array.isArray(item.files) && item.files[0]
+  if (file && file.url) return file.url
+  return `${item.title || ""}|${item.due || ""}`
+}
+
+function readSubmitted() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SUBMITTED_KEY))
+    return saved && typeof saved === "object" ? saved : {}
+  } catch {
+    return {}
+  }
+}
+
+function submissionButton(item) {
+  const id = assignmentId(item)
+  const button = document.createElement("button")
+  button.type = "button"
+  button.className = "submission"
+
+  function paint(submitted) {
+    button.classList.toggle("is-submitted", submitted)
+    button.classList.toggle("is-open", !submitted)
+    button.textContent = submitted ? "Submitted" : "Not submitted"
+    button.setAttribute("aria-pressed", submitted ? "true" : "false")
+  }
+
+  paint(Boolean(readSubmitted()[id]))
+  button.addEventListener("click", () => {
+    const saved = readSubmitted()
+    const next = !saved[id]
+    if (next) saved[id] = true
+    else delete saved[id]
+    localStorage.setItem(SUBMITTED_KEY, JSON.stringify(saved))
+    paint(next)
+  })
+  return button
 }
 
 function collectFiles(item) {
