@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import date, datetime
 from pathlib import Path
 
@@ -74,6 +75,30 @@ def is_upcoming(due: datetime, now: datetime) -> bool:
     return due >= now
 
 
+LINK_PATTERN = re.compile(r"https?://\S+")
+
+
+def event_files(component, description: str) -> list[dict]:
+    files = []
+    seen = set()
+
+    def add(href: str, name: str) -> None:
+        cleaned = href.strip().rstrip(").,;")
+        if not cleaned or cleaned in seen:
+            return
+        seen.add(cleaned)
+        files.append({"name": name, "url": cleaned})
+
+    raw_url = component.get("url")
+    if raw_url is not None:
+        add(str(raw_url), "Open in Schoology")
+
+    for match in LINK_PATTERN.findall(description):
+        add(match, "Attached link")
+
+    return files
+
+
 def text_field(component, name: str) -> str:
     value = component.get(name)
     if value is None:
@@ -93,11 +118,13 @@ def fetch_assignments(url: str) -> list[dict]:
         due = event_due(component)
         if due is None or not is_upcoming(due, now):
             continue
+        description = text_field(component, "description")
         assignments.append(
             {
                 "title": text_field(component, "summary") or "Untitled assignment",
-                "description": text_field(component, "description"),
+                "description": description,
                 "due": due.isoformat(),
+                "files": event_files(component, description),
             }
         )
 

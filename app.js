@@ -98,6 +98,11 @@ function initLogin() {
   const error = document.querySelector("#login-error")
   const date = document.querySelector("#today")
   const signOut = document.querySelector("#sign-out")
+  const tabs = document.querySelectorAll(".nav-tab")
+  const homeView = document.querySelector("#view-home")
+  const assignmentsView = document.querySelector("#view-assignments")
+  const assignmentList = document.querySelector("#assignment-list")
+  let assignmentsLoaded = false
 
   date.textContent = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
@@ -138,6 +143,165 @@ function initLogin() {
     sessionStorage.removeItem(SESSION_KEY)
     showLogin()
   })
+
+  function showView(name) {
+    const home = name !== "assignments"
+    homeView.hidden = !home
+    assignmentsView.hidden = home
+    tabs.forEach((tab) => {
+      const active = tab.dataset.view === (home ? "home" : "assignments")
+      tab.classList.toggle("is-active", active)
+      if (active) tab.setAttribute("aria-current", "page")
+      else tab.removeAttribute("aria-current")
+    })
+    document.title = home ? "Personal Helper" : "Assignments · Personal Helper"
+    if (!home) loadAssignments()
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => showView(tab.dataset.view))
+  })
+
+  async function loadAssignments() {
+    if (assignmentsLoaded) return
+    assignmentList.replaceChildren(statusLine("Loading assignments…"))
+    try {
+      const response = await fetch("assignments.json")
+      if (!response.ok) throw new Error("missing file")
+      const assignments = await response.json()
+      assignmentsLoaded = true
+      renderAssignments(assignments)
+    } catch {
+      assignmentList.replaceChildren(statusLine("Assignments could not be loaded."))
+    }
+  }
+
+  function renderAssignments(assignments) {
+    const upcoming = assignments
+      .filter((item) => item && item.due)
+      .slice()
+      .sort((left, right) => new Date(left.due) - new Date(right.due))
+
+    if (upcoming.length === 0) {
+      assignmentList.replaceChildren(statusLine("Nothing is due."))
+      return
+    }
+
+    const fragment = document.createDocumentFragment()
+    let currentDay = ""
+    let group = null
+
+    upcoming.forEach((item) => {
+      const due = new Date(item.due)
+      const day = dayLabel(due)
+      if (day !== currentDay) {
+        currentDay = day
+        group = document.createElement("section")
+        group.className = "day-group"
+        const label = document.createElement("h2")
+        label.className = "day-label"
+        label.textContent = day
+        group.append(label)
+        fragment.append(group)
+      }
+
+      const card = document.createElement("article")
+      card.className = "assignment"
+      const title = document.createElement("h3")
+      title.textContent = item.title || "Untitled assignment"
+      const when = document.createElement("p")
+      when.className = "due-time"
+      when.textContent = timeLabel(due)
+      card.append(title, when)
+
+      const description = cleanDescription(item.description)
+      if (description) {
+        const body = document.createElement("p")
+        body.className = "assignment-description"
+        body.textContent = description
+        card.append(body)
+      }
+
+      const files = collectFiles(item)
+      if (files.length > 0) {
+        const list = document.createElement("ul")
+        list.className = "file-list"
+        files.forEach((file) => {
+          const entry = document.createElement("li")
+          const link = document.createElement("a")
+          link.href = file.url
+          link.textContent = file.name
+          link.target = "_blank"
+          link.rel = "noopener noreferrer"
+          entry.append(link)
+          list.append(entry)
+        })
+        card.append(list)
+      }
+
+      group.append(card)
+    })
+
+    assignmentList.replaceChildren(fragment)
+  }
+}
+
+function statusLine(message) {
+  const line = document.createElement("p")
+  line.className = "assignment-status"
+  line.textContent = message
+  return line
+}
+
+function dayLabel(due) {
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  }).format(due)
+}
+
+function timeLabel(due) {
+  const time = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(due)
+  return `Due ${time}`
+}
+
+function collectFiles(item) {
+  const files = []
+  const seen = new Set()
+
+  function add(url, name) {
+    if (!url || seen.has(url)) return
+    seen.add(url)
+    files.push({ url, name: name || "Attached file" })
+  }
+
+  if (Array.isArray(item.files)) {
+    item.files.forEach((file) => {
+      if (typeof file === "string") add(file, "Attached link")
+      else if (file) add(file.url, file.name)
+    })
+  }
+
+  const description = String(item.description || "")
+  const matches = description.match(/https?:\/\/\S+/g) || []
+  matches.forEach((match) => add(match.replace(/[).,;]+$/, ""), "Attached link"))
+  return files
+}
+
+function cleanDescription(description) {
+  let text = String(description || "")
+  text = text.replace(/\s*-\s*Link:\s*https?:\/\/\S+/gi, "")
+  text = text.replace(/https?:\/\/\S+/g, "")
+  text = text.replace(/\*/g, "")
+  text = text.replace(/[ \t]*\n[ \t]*/g, " ")
+  text = text.replace(/[ \t]{2,}/g, " ")
+  text = text.trim()
+  if (text === "-" || text === "Link:") return ""
+  return text
 }
 
 initLogin()

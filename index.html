@@ -27,27 +27,40 @@
         <span class="brand-link">Personal Helper</span>
         <button id="sign-out" class="sign-out" type="button">Sign out</button>
       </header>
-      <main class="site-main">
-        <div class="desk">
-          <p id="today" class="eyebrow"></p>
-          <h1>Your desk is open.</h1>
-          <p class="lede">You are signed in. This page stays behind the site password, along with the rest of Personal Helper.</p>
-          <ul class="desk-list">
-            <li>
-              <h2>Today</h2>
-              <p>A quiet place for the day in front of you.</p>
-            </li>
-            <li>
-              <h2>Notes</h2>
-              <p>Private notes can live here when you are ready to add them.</p>
-            </li>
-            <li>
-              <h2>Reminders</h2>
-              <p>Nothing is scheduled yet.</p>
-            </li>
-          </ul>
-        </div>
-      </main>
+      <div class="workspace">
+        <aside class="sidebar">
+          <nav class="side-nav" aria-label="Sections">
+            <button class="nav-tab is-active" type="button" data-view="home" aria-current="page">Home</button>
+            <button class="nav-tab" type="button" data-view="assignments">Assignments</button>
+          </nav>
+        </aside>
+        <main class="site-main">
+          <section id="view-home" class="desk">
+            <p id="today" class="eyebrow"></p>
+            <h1>Your desk is open.</h1>
+            <p class="lede">You are signed in. This page stays behind the site password, along with the rest of Personal Helper.</p>
+            <ul class="desk-list">
+              <li>
+                <h2>Today</h2>
+                <p>A quiet place for the day in front of you.</p>
+              </li>
+              <li>
+                <h2>Notes</h2>
+                <p>Private notes can live here when you are ready to add them.</p>
+              </li>
+              <li>
+                <h2>Reminders</h2>
+                <p>Nothing is scheduled yet.</p>
+              </li>
+            </ul>
+          </section>
+          <section id="view-assignments" class="assignments" hidden>
+            <p class="eyebrow">Sorted by due date</p>
+            <h1>Assignments</h1>
+            <div id="assignment-list" class="assignment-list"></div>
+          </section>
+        </main>
+      </div>
     </div>
 
     <script src="app.js"></script>
