@@ -217,9 +217,16 @@ function initLogin() {
       dueWord.textContent = "Due"
       when.append(dueWord, document.createTextNode(" " + dueBadgeText(due, soon)))
       meta.append(when, submissionButton(item))
+      card.append(meta)
+      if (item.course) {
+        const course = document.createElement("p")
+        course.className = "course-label"
+        course.textContent = item.course
+        card.append(course)
+      }
       const title = document.createElement("h3")
       title.textContent = item.title || "Untitled assignment"
-      card.append(meta, title)
+      card.append(title)
 
       const description = cleanDescription(item.description)
       if (description) {

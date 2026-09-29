@@ -279,6 +279,15 @@ body {
   margin-bottom: 12px;
 }
 
+.course-label {
+  margin: 0 0 6px;
+  color: #24301f;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
 .assignment h3 {
   margin: 0 0 8px;
   font-size: 1.05rem;

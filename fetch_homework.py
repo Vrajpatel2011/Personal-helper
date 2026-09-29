@@ -76,6 +76,41 @@ def is_upcoming(due: datetime, now: datetime) -> bool:
 
 
 LINK_PATTERN = re.compile(r"https?://\S+")
+SPANISH_PATTERN = re.compile(
+    r"[¿¡]|prueba|actividad|vocabulario|campanad|canci[oó]n|español|hispan|tattoo|barrio|gustos",
+    re.IGNORECASE,
+)
+ENGLISH_PATTERN = re.compile(
+    r"narrative|draft|annotation|author'?s craft|reading goal|essay|flash draft|time capsule",
+    re.IGNORECASE,
+)
+ALGEBRA_PATTERN = re.compile(
+    r"algebra|quadratic|parabola|graphing|linear equation|deltamath|piecewise|vertex form|intercept form|standard form|progress check|chapter \d+",
+    re.IGNORECASE,
+)
+BIOLOGY_PATTERN = re.compile(
+    r"macromolecule|organism|living thing|biology|ecology|\bcell\b|\bdna\b|protein",
+    re.IGNORECASE,
+)
+CHEMISTRY_PATTERN = re.compile(
+    r"chem|atom|ions?|periodic|bohr|element|compound|mixture|calorie|lab safety",
+    re.IGNORECASE,
+)
+
+
+def infer_course(title: str, description: str) -> str:
+    text = f"{title}\n{description}"
+    if SPANISH_PATTERN.search(text):
+        return "Spanish"
+    if ENGLISH_PATTERN.search(text):
+        return "English"
+    if ALGEBRA_PATTERN.search(text) or re.match(r"^\d+\.\d+", title):
+        return "Honors Algebra 2"
+    if BIOLOGY_PATTERN.search(text):
+        return "Biology"
+    if CHEMISTRY_PATTERN.search(text) or re.match(r"^\d+[a-z]?(?:\s*[-–])", title):
+        return "Chemistry"
+    return ""
 
 
 def event_files(component, description: str) -> list[dict]:
@@ -122,6 +157,7 @@ def fetch_assignments(url: str) -> list[dict]:
         assignments.append(
             {
                 "title": text_field(component, "summary") or "Untitled assignment",
+                "course": infer_course(text_field(component, "summary"), description),
                 "description": description,
                 "due": due.isoformat(),
                 "files": event_files(component, description),
