@@ -200,7 +200,7 @@ function initLogin() {
         group = document.createElement("section")
         group.className = "day-group"
         const label = document.createElement("h2")
-        label.className = "day-label"
+        label.className = "day-label" + (isDueSoon(due) ? " is-soon" : " is-later")
         label.textContent = day
         group.append(label)
         fragment.append(group)
@@ -210,11 +210,12 @@ function initLogin() {
       card.className = "assignment"
       const meta = document.createElement("div")
       meta.className = "assignment-meta"
+      const soon = isDueSoon(due)
       const when = document.createElement("p")
-      when.className = "due-time"
+      when.className = "due-time" + (soon ? " is-soon" : " is-later")
       const dueWord = document.createElement("span")
       dueWord.textContent = "Due"
-      when.append(dueWord, document.createTextNode(timeLabel(due)))
+      when.append(dueWord, document.createTextNode(" " + dueBadgeText(due, soon)))
       meta.append(when, submissionButton(item))
       const title = document.createElement("h3")
       title.textContent = item.title || "Untitled assignment"
@@ -265,6 +266,24 @@ function dayLabel(due) {
     month: "long",
     day: "numeric",
   }).format(due)
+}
+
+function isDueSoon(due) {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const dueDay = new Date(due)
+  dueDay.setHours(0, 0, 0, 0)
+  const days = Math.round((dueDay - today) / 86400000)
+  return days <= 2
+}
+
+function dueBadgeText(due, soon) {
+  const date = new Intl.DateTimeFormat("en-US", {
+    weekday: soon ? "short" : undefined,
+    month: "short",
+    day: "numeric",
+  }).format(due)
+  return soon ? `${date} · ${timeLabel(due)}` : `${date}, ${timeLabel(due)}`
 }
 
 function timeLabel(due) {

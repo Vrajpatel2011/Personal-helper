@@ -251,6 +251,15 @@ body {
 
 .day-label {
   margin: 0;
+}
+
+.day-label.is-soon {
+  color: var(--ink);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.day-label.is-later {
   color: var(--muted);
   font-size: 0.85rem;
   font-weight: 500;
@@ -278,6 +287,9 @@ body {
 
 .due-time {
   margin: 0;
+}
+
+.due-time.is-soon {
   padding: 7px 12px;
   border-radius: 999px;
   background: #31402c;
@@ -287,12 +299,27 @@ body {
   letter-spacing: -0.02em;
 }
 
+.due-time.is-later {
+  padding: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
 .due-time span {
   margin-right: 6px;
-  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.due-time.is-soon span {
+  font-size: 0.68rem;
+}
+
+.due-time.is-later span {
+  font-size: 0.72rem;
+  font-weight: 600;
 }
 
 .submission {
