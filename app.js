@@ -102,6 +102,8 @@ function initLogin() {
   const tabs = document.querySelectorAll(".nav-tab")
   const homeView = document.querySelector("#view-home")
   const assignmentsView = document.querySelector("#view-assignments")
+  const periodicView = document.querySelector("#view-periodic")
+  const siteMain = document.querySelector(".site-main")
   const assignmentList = document.querySelector("#assignment-list")
   let assignmentsLoaded = false
 
@@ -146,17 +148,26 @@ function initLogin() {
   })
 
   function showView(name) {
-    const home = name !== "assignments"
-    homeView.hidden = !home
-    assignmentsView.hidden = home
+    const view = name === "assignments" || name === "periodic" ? name : "home"
+    homeView.hidden = view !== "home"
+    assignmentsView.hidden = view !== "assignments"
+    periodicView.hidden = view !== "periodic"
+    siteMain.classList.toggle("is-wide", view === "periodic")
     tabs.forEach((tab) => {
-      const active = tab.dataset.view === (home ? "home" : "assignments")
+      const active = tab.dataset.view === view
       tab.classList.toggle("is-active", active)
       if (active) tab.setAttribute("aria-current", "page")
       else tab.removeAttribute("aria-current")
     })
-    document.title = home ? "Personal Helper" : "Assignments · Personal Helper"
-    if (!home) loadAssignments()
+    const titles = {
+      home: "Personal Helper",
+      assignments: "Assignments · Personal Helper",
+      periodic: "Periodic Table · Personal Helper",
+    }
+    document.title = titles[view]
+    if (view !== "periodic" && window.closePeriodicDialog) window.closePeriodicDialog()
+    if (view === "assignments") loadAssignments()
+    if (view === "periodic") window.renderPeriodicTable()
   }
 
   tabs.forEach((tab) => {

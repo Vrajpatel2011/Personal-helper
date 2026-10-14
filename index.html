@@ -32,6 +32,7 @@
           <nav class="side-nav" aria-label="Sections">
             <button class="nav-tab is-active" type="button" data-view="home" aria-current="page">Home</button>
             <button class="nav-tab" type="button" data-view="assignments">Assignments</button>
+            <button class="nav-tab" type="button" data-view="periodic">Periodic table</button>
           </nav>
         </aside>
         <main class="site-main">
@@ -59,10 +60,16 @@
             <h1>Assignments</h1>
             <div id="assignment-list" class="assignment-list"></div>
           </section>
+          <section id="view-periodic" class="periodic" hidden>
+            <p class="eyebrow">Click an element</p>
+            <h1>Periodic table</h1>
+            <div id="periodic-root"></div>
+          </section>
         </main>
       </div>
     </div>
 
+    <script src="periodic.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
