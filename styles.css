@@ -639,8 +639,8 @@ body {
 }
 
 .python-view h1 {
-  margin: 8px 0 16px;
-  font-size: 1.8rem;
+  margin: 4px 0 10px;
+  font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -0.02em;
 }
@@ -648,8 +648,8 @@ body {
 .python-lab {
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - 190px);
-  min-height: 460px;
+  height: calc(100dvh - 150px);
+  min-height: 560px;
   border-radius: 12px;
   overflow: hidden;
   background: #000;
@@ -681,14 +681,86 @@ body {
   cursor: wait;
 }
 
-.python-hint {
-  color: #8a8a8a;
-  font-size: 0.78rem;
+.python-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.python-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  background: #242424;
+  color: #f2f2f2;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 3px 4px 3px 3px;
+}
+
+.python-tab-name {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+.python-tab.is-active {
+  background: #2f9e44;
+  color: #f4fff6;
+}
+
+.python-tab-close {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.python-tab-rename {
+  width: 9ch;
+  border: 0;
+  border-radius: 4px;
+  background: #111;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  padding: 2px 4px;
+}
+
+.python-new {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 8px;
+  background: #2a2a2a;
+  color: #fff;
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .python-editor {
-  flex: 1 1 58%;
-  min-height: 180px;
+  flex: 1 1 auto;
+  min-height: 340px;
   background: #000;
 }
 
@@ -705,15 +777,16 @@ body {
 }
 
 .python-console {
-  flex: 0 0 34%;
-  min-height: 120px;
+  flex: 0 0 150px;
+  min-height: 110px;
   margin: 0;
   padding: 12px 14px;
   overflow: auto;
   background: #000;
-  color: #c8c8c8;
+  color: #f4f4f4;
   font-family: Consolas, "Courier New", monospace;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   line-height: 1.45;
   white-space: pre-wrap;
 }
@@ -727,13 +800,21 @@ body {
 }
 
 .python-editor .CodeMirror,
+.python-editor .CodeMirror-scroll,
+.python-editor .CodeMirror pre,
+.python-editor .CodeMirror-line,
+.python-editor .CodeMirror span {
+  font-weight: 700;
+}
+
+.python-editor .CodeMirror,
 .python-editor .CodeMirror-scroll {
   height: 100%;
   background: #000 !important;
-  color: #a9b7c6;
+  color: #f3f7ff;
   font-family: Consolas, "Courier New", monospace;
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 18px;
+  line-height: 1.55;
 }
 
 .python-editor .CodeMirror-gutters {
@@ -750,44 +831,43 @@ body {
 }
 
 .python-editor .cm-keyword {
-  color: #cc7832 !important;
-  font-weight: 600;
+  color: #ffb15a !important;
 }
 
 .python-editor .cm-builtin {
-  color: #8888c6 !important;
+  color: #c8b6ff !important;
 }
 
 .python-editor .cm-string,
 .python-editor .cm-string-2 {
-  color: #6a8759 !important;
+  color: #9dff86 !important;
 }
 
 .python-editor .cm-number {
-  color: #6897bb !important;
+  color: #7ad7ff !important;
 }
 
 .python-editor .cm-comment {
-  color: #808080 !important;
+  color: #b0b0b0 !important;
   font-style: italic;
 }
 
 .python-editor .cm-def {
-  color: #ffc66d !important;
+  color: #ffe27a !important;
 }
 
 .python-editor .cm-variable,
 .python-editor .cm-variable-2 {
-  color: #a9b7c6 !important;
+  color: #f3f7ff !important;
 }
 
 .python-editor .cm-operator,
 .python-editor .cm-punctuation {
-  color: #a9b7c6 !important;
+  color: #ffffff !important;
 }
 
 .python-editor .cm-atom {
-  color: #cc7832 !important;
+  color: #ffb15a !important;
 }
 
 @media (max-width: 860px) {
