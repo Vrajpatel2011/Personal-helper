@@ -103,6 +103,7 @@ function initLogin() {
   const homeView = document.querySelector("#view-home")
   const assignmentsView = document.querySelector("#view-assignments")
   const periodicView = document.querySelector("#view-periodic")
+  const pythonView = document.querySelector("#view-python")
   const siteMain = document.querySelector(".site-main")
   const assignmentList = document.querySelector("#assignment-list")
   let assignmentsLoaded = false
@@ -148,11 +149,12 @@ function initLogin() {
   })
 
   function showView(name) {
-    const view = name === "assignments" || name === "periodic" ? name : "home"
+    const view = ["assignments", "periodic", "python"].includes(name) ? name : "home"
     homeView.hidden = view !== "home"
     assignmentsView.hidden = view !== "assignments"
     periodicView.hidden = view !== "periodic"
-    siteMain.classList.toggle("is-wide", view === "periodic")
+    pythonView.hidden = view !== "python"
+    siteMain.classList.toggle("is-wide", view === "periodic" || view === "python")
     tabs.forEach((tab) => {
       const active = tab.dataset.view === view
       tab.classList.toggle("is-active", active)
@@ -163,11 +165,13 @@ function initLogin() {
       home: "Personal Helper",
       assignments: "Assignments · Personal Helper",
       periodic: "Periodic Table · Personal Helper",
+      python: "Python · Personal Helper",
     }
     document.title = titles[view]
     if (view !== "periodic" && window.closePeriodicDialog) window.closePeriodicDialog()
     if (view === "assignments") loadAssignments()
     if (view === "periodic") window.renderPeriodicTable()
+    if (view === "python") window.renderPythonLab()
   }
 
   tabs.forEach((tab) => {

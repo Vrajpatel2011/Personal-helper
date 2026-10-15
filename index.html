@@ -33,6 +33,7 @@
             <button class="nav-tab is-active" type="button" data-view="home" aria-current="page">Home</button>
             <button class="nav-tab" type="button" data-view="assignments">Assignments</button>
             <button class="nav-tab" type="button" data-view="periodic">Periodic table</button>
+            <button class="nav-tab" type="button" data-view="python">Python</button>
           </nav>
         </aside>
         <main class="site-main">
@@ -60,6 +61,11 @@
             <h1>Assignments</h1>
             <div id="assignment-list" class="assignment-list"></div>
           </section>
+          <section id="view-python" class="python-view" hidden>
+            <p class="eyebrow">Run Python in the browser</p>
+            <h1>Python</h1>
+            <div id="python-root"></div>
+          </section>
           <section id="view-periodic" class="periodic" hidden>
             <p class="eyebrow">Click an element</p>
             <h1>Periodic table</h1>
@@ -70,6 +76,7 @@
     </div>
 
     <script src="periodic.js"></script>
+    <script src="python-lab.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
