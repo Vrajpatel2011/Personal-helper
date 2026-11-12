@@ -1,17 +1,5 @@
 [
   {
-    "title": "Prueba",
-    "course": "Spanish",
-    "description": "- Link: http://troyschools.schoology.com/event/8643449886/profile",
-    "due": "2026-11-12T00:00:00",
-    "files": [
-      {
-        "name": "Open in Schoology",
-        "url": "http://troyschools.schoology.com/event/8643449886/profile"
-      }
-    ]
-  },
-  {
     "title": "13 - What do you mean \"Molecules are Sticky\"? Lab",
     "course": "Chemistry",
     "description": "- Link: http://troyschools.schoology.com/assignment/8610781698",
@@ -68,6 +56,18 @@
       {
         "name": "Open in Schoology",
         "url": "http://troyschools.schoology.com/course/8481408884/materials/discussion/view/8617564301"
+      }
+    ]
+  },
+  {
+    "title": "Prueba verbos radicales",
+    "course": "Spanish",
+    "description": "- Link: http://troyschools.schoology.com/assignment/8648291614",
+    "due": "2026-11-12T17:00:00+00:00",
+    "files": [
+      {
+        "name": "Open in Schoology",
+        "url": "http://troyschools.schoology.com/assignment/8648291614"
       }
     ]
   },
